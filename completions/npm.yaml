@@ -1,0 +1,160 @@
+# shellmind completion spec: npm
+name: npm
+description: The Node.js package manager
+dynamic: npm_scripts
+flags:
+  - name: --silent
+    description: Suppress npm output
+  - name: --no-fund
+    description: Skip funding messages
+  - name: --no-audit
+    description: Skip security audit
+  - name: -w
+    arg: workspace
+    description: Run in a workspace
+subcommands:
+  - name: run
+    description: Run a script defined in package.json
+    dynamic: npm_scripts
+    flags:
+      - name: --silent
+        description: Suppress script output
+      - name: --if-present
+        description: No error when the script is missing
+  - name: install
+    description: Install dependencies (npm i for short)
+    flags:
+      - name: -D
+        description: Save to devDependencies
+      - name: --save-dev
+        description: Save to devDependencies
+      - name: -g
+        description: Install globally
+      - name: --global
+        description: Install globally
+      - name: -E
+        description: Save an exact version
+      - name: --save-exact
+        description: Save an exact version
+      - name: --save-optional
+        description: Save to optionalDependencies
+      - name: --dry-run
+        description: Do not actually write node_modules
+      - name: --legacy-peer-deps
+        description: Ignore peer-dependency conflicts (npm 7+)
+      - name: --force
+        description: Fetch remote resources even on cache hit
+  - name: i
+    description: Alias for install
+    flags:
+      - name: -D
+        description: Save to devDependencies
+      - name: -g
+        description: Install globally
+  - name: uninstall
+    description: Remove a package
+    flags:
+      - name: -g
+        description: Uninstall globally
+      - name: -D
+        description: Remove from devDependencies
+  - name: update
+    description: Update packages to their latest allowed versions
+    flags:
+      - name: -g
+        description: Update global packages
+      - name: --save
+        description: Save the new versions to package.json
+  - name: outdated
+    description: List packages that are out of date
+  - name: ls
+    description: List installed packages and their dependency trees
+    flags:
+      - name: -g
+        description: List global packages
+      - name: --depth
+        arg: n
+        description: Max tree depth (0 for top-level)
+  - name: list
+    description: Alias for ls
+    flags:
+      - name: -g
+        description: List global packages
+      - name: --depth
+        arg: n
+        description: Max tree depth (0 for top-level)
+  - name: ci
+    description: Clean install from package-lock.json
+  - name: cache
+    description: Manage the npm cache
+    subcommands:
+      - name: clean
+        description: Delete all cached data
+        flags:
+          - name: --force
+            description: Required to actually clean
+      - name: verify
+        description: Verify cache contents
+  - name: init
+    description: Create a package.json
+    flags:
+      - name: -y
+        description: Accept all defaults
+  - name: test
+    description: Run the test script
+  - name: start
+    description: Run the start script
+  - name: build
+    description: Run the build script (if defined)
+  - name: audit
+    description: Security audit of dependencies
+    subcommands:
+      - name: fix
+        description: Apply compatible fixes
+    flags:
+      - name: --json
+        description: JSON report
+      - name: --omit
+        arg: dep-type
+        description: Exclude dependency type (e.g. dev)
+  - name: publish
+    description: Publish a package to the registry
+    flags:
+      - name: --dry-run
+        description: Do everything except publish
+      - name: --access
+        arg: public|restricted
+        description: Visibility for scoped packages
+      - name: --tag
+        arg: name
+        description: Registry dist-tag (default latest)
+  - name: version
+    description: Bump the package version
+    subcommands:
+      - name: major
+        description: Bump the major version
+      - name: minor
+        description: Bump the minor version
+      - name: patch
+        description: Bump the patch version
+  - name: link
+    description: Symlink a package globally / into a project
+  - name: unlink
+    description: Remove a global symlink
+  - name: login
+    description: Log in to the registry
+  - name: logout
+    description: Log out of the registry
+  - name: whoami
+    description: Print the logged-in username
+  - name: deprecate
+    description: Deprecate a published version
+  - name: dist-tag
+    description: Manage dist-tags
+    subcommands:
+      - name: ls
+        description: List dist-tags
+      - name: add
+        description: Add a dist-tag
+      - name: rm
+        description: Remove a dist-tag

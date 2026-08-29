@@ -1,0 +1,399 @@
+# shellmind completion spec: docker
+name: docker
+description: Build, run and manage containers
+flags:
+  - name: --context
+    arg: name
+    description: Use a different Docker context
+  - name: -H
+    arg: host
+    description: Daemon socket to connect to
+subcommands:
+  - name: ps
+    description: List running containers
+    flags:
+      - name: -a
+        description: Include stopped containers
+      - name: -q
+        description: IDs only
+      - name: -s
+        description: Show file sizes
+      - name: -n
+        arg: count
+        description: Show the last n containers
+      - name: --format
+        arg: template
+        description: Format output with a Go template
+      - name: --filter
+        arg: filter
+        description: Filter output (e.g. status=running)
+  - name: images
+    description: List local images
+    flags:
+      - name: -a
+        description: Include intermediate images
+      - name: -q
+        description: IDs only
+      - name: --format
+        arg: template
+        description: Format output with a Go template
+      - name: --filter
+        arg: filter
+        description: Filter output (e.g. dangling=true)
+      - name: --no-trunc
+        description: Do not truncate IDs
+  - name: run
+    description: Create and start a new container from an image
+    flags:
+      - name: -d
+        description: Run in the background
+      - name: -it
+        description: Interactive with a TTY
+      - name: --rm
+        description: Remove the container when it exits
+      - name: --name
+        arg: name
+        description: Assign a container name
+      - name: -p
+        arg: host:container
+        description: Publish a port
+      - name: -v
+        arg: volume
+        description: Mount a volume or bind-mount
+      - name: -e
+        arg: VAR=value
+        description: Set an environment variable
+      - name: --network
+        arg: network
+        description: Attach to a network
+      - name: -w
+        arg: path
+        description: Working directory inside the container
+      - name: -u
+        arg: user
+        description: Run as this user
+      - name: --entrypoint
+        arg: cmd
+        description: Override the image entrypoint
+      - name: --memory
+        arg: bytes
+        description: Memory limit
+      - name: --cpus
+        arg: count
+        description: CPU limit
+      - name: --restart
+        arg: policy
+        description: Restart policy (no, on-failure, always)
+      - name: --pull
+        arg: policy
+        description: Pull image policy (missing, never, always)
+  - name: exec
+    description: Run a command inside a running container
+    flags:
+      - name: -it
+        description: Interactive with a TTY
+      - name: -u
+        arg: user
+        description: Run as this user
+      - name: -e
+        arg: VAR=value
+        description: Set an environment variable
+      - name: -w
+        arg: path
+        description: Working directory
+      - name: -d
+        description: Detached mode
+  - name: build
+    description: Build an image from a Dockerfile
+    flags:
+      - name: -t
+        arg: name:tag
+        description: Tag the image
+      - name: -f
+        arg: dockerfile
+        description: Path to the Dockerfile
+      - name: --no-cache
+        description: Do not use the build cache
+      - name: --pull
+        description: Always pull newer base images
+      - name: --target
+        arg: stage
+        description: Build only up to this stage
+  - name: logs
+    description: Fetch container logs
+    flags:
+      - name: -f
+        description: Follow log output
+      - name: --tail
+        arg: n
+        description: Show the last n lines
+      - name: -t
+        description: Show timestamps
+      - name: --since
+        arg: duration
+        description: Show logs since (e.g. 10m)
+  - name: stop
+    description: Stop running containers
+    flags:
+      - name: -t
+        arg: seconds
+        description: Seconds to wait before killing
+  - name: kill
+    description: Force-stop running containers
+  - name: start
+    description: Start stopped containers
+  - name: restart
+    description: Restart containers
+  - name: rm
+    description: Remove stopped containers
+    flags:
+      - name: -f
+        description: Force-remove a running container
+      - name: -v
+        description: Remove anonymous volumes too
+  - name: rmi
+    description: Remove images
+    flags:
+      - name: -f
+        description: Force removal
+  - name: inspect
+    description: Show detailed object metadata as JSON
+  - name: cp
+    description: Copy files between host and containers
+  - name: stats
+    description: Live resource usage of containers
+    flags:
+      - name: -a
+        description: Include stopped containers
+      - name: --no-stream
+        description: One-shot snapshot
+  - name: top
+    description: Show processes running inside a container
+  - name: version
+    description: Print client/server version info
+  - name: info
+    description: Display system-wide information
+  - name: login
+    description: Log in to a registry
+  - name: logout
+    description: Log out of a registry
+  - name: pull
+    description: Download an image from a registry
+  - name: push
+    description: Upload an image to a registry
+  - name: save
+    description: Export an image as a tarball
+  - name: load
+    description: Import an image from a tarball
+  - name: tag
+    description: Create an extra tag for an image
+  - name: compose
+    description: Define and run multi-container applications
+    dynamic: docker_services
+    subcommands:
+      - name: up
+        description: Create and start all services
+        dynamic: docker_services
+        flags:
+          - name: -d
+            description: Detached mode
+          - name: --build
+            description: Build images before starting
+          - name: --force-recreate
+            description: Recreate containers even when unchanged
+          - name: --no-deps
+            description: Do not start linked services
+          - name: --scale
+            arg: service=num
+            description: Scale a service to n replicas
+          - name: --wait
+            description: Wait for services to be healthy
+          - name: -p
+            arg: project
+            description: Project name
+      - name: down
+        description: Stop and remove containers and networks
+        flags:
+          - name: -v
+            description: Also remove named volumes
+          - name: --rmi
+            arg: all|local
+            description: Also remove images
+          - name: --remove-orphans
+            description: Remove containers not defined in the file
+          - name: -t
+            arg: seconds
+            description: Shutdown timeout
+      - name: build
+        description: Build or rebuild services
+        dynamic: docker_services
+        flags:
+          - name: --no-cache
+            description: Do not use cache
+          - name: --pull
+            description: Always pull newer base images
+      - name: logs
+        description: Show service logs
+        dynamic: docker_services
+        flags:
+          - name: -f
+            description: Follow output
+          - name: --tail
+            arg: n
+            description: Last n lines
+      - name: ps
+        description: List compose containers
+      - name: exec
+        description: Run a command in a running service container
+        dynamic: docker_services
+        flags:
+          - name: -it
+            description: Interactive TTY
+      - name: pull
+        description: Pull service images
+        dynamic: docker_services
+      - name: push
+        description: Push service images
+        dynamic: docker_services
+      - name: stop
+        description: Stop services without removing them
+        dynamic: docker_services
+      - name: start
+        description: Start existing services
+        dynamic: docker_services
+      - name: restart
+        description: Restart services
+        dynamic: docker_services
+      - name: rm
+        description: Remove stopped service containers
+        dynamic: docker_services
+      - name: run
+        description: Run a one-off command in a new service container
+        dynamic: docker_services
+      - name: config
+        description: Validate and view the merged compose file
+      - name: version
+        description: Show the compose plugin version
+  - name: image
+    description: Manage images
+    subcommands:
+      - name: ls
+        description: List images
+        flags:
+          - name: -a
+            description: Include intermediate images
+          - name: -q
+            description: IDs only
+      - name: prune
+        description: Remove unused images
+        flags:
+          - name: -a
+            description: Remove ALL unused images, not just dangling ones
+          - name: -f
+            description: Do not ask for confirmation
+          - name: --filter
+            arg: filter
+            description: Filter (e.g. until=24h)
+      - name: build
+        description: Build an image (alias of docker build)
+      - name: pull
+        description: Pull an image
+      - name: push
+        description: Push an image
+      - name: rm
+        description: Remove images
+      - name: tag
+        description: Tag an image
+      - name: inspect
+        description: Show image metadata
+      - name: history
+        description: Show image layers
+  - name: container
+    description: Manage containers
+    subcommands:
+      - name: ls
+        description: List containers
+        flags:
+          - name: -a
+            description: Include stopped containers
+          - name: -q
+            description: IDs only
+      - name: run
+        description: Run a new container
+      - name: exec
+        description: Exec into a running container
+      - name: stop
+        description: Stop containers
+      - name: start
+        description: Start containers
+      - name: restart
+        description: Restart containers
+      - name: rm
+        description: Remove containers
+      - name: logs
+        description: Show container logs
+      - name: inspect
+        description: Show container metadata
+      - name: prune
+        description: Remove stopped containers
+      - name: cp
+        description: Copy files in/out of containers
+      - name: top
+        description: Show container processes
+      - name: stats
+        description: Resource usage
+  - name: system
+    description: Manage Docker system-wide data
+    subcommands:
+      - name: prune
+        description: Remove unused data (containers, networks, dangling images)
+        flags:
+          - name: -a
+            description: Also remove all unused images
+          - name: --volumes
+            description: Also prune unused volumes
+          - name: -f
+            description: Do not ask for confirmation
+          - name: --filter
+            arg: filter
+            description: Filter (e.g. until=24h)
+      - name: df
+        description: Show disk usage
+        flags:
+          - name: -v
+            description: Verbose per-object usage
+      - name: info
+        description: System-wide information
+  - name: volume
+    description: Manage volumes
+    subcommands:
+      - name: ls
+        description: List volumes
+        flags:
+          - name: -q
+            description: Names only
+      - name: create
+        description: Create a volume
+      - name: rm
+        description: Remove volumes
+      - name: inspect
+        description: Show volume metadata
+      - name: prune
+        description: Remove unused volumes
+  - name: network
+    description: Manage networks
+    subcommands:
+      - name: ls
+        description: List networks
+      - name: create
+        description: Create a network
+      - name: rm
+        description: Remove networks
+      - name: inspect
+        description: Show network metadata
+      - name: connect
+        description: Connect a container to a network
+      - name: disconnect
+        description: Disconnect a container from a network
+      - name: prune
+        description: Remove unused networks

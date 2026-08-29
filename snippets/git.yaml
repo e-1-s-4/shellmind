@@ -1,0 +1,44 @@
+# shellmind team pack: git
+# Team packs are read-only snippets shared via config.toml:
+#   [snippets]
+#   include = ["/path/to/git.yaml"]
+snippets:
+  - name: reset local branch
+    description: Reset the current branch to match origin/main exactly
+    command: git fetch origin && git reset --hard origin/main
+    tags: [git, branch]
+
+  - name: undo last commit
+    description: Undo the last commit, keeping its changes staged
+    command: git reset --soft HEAD~1
+    tags: [git, commit]
+
+  - name: push new branch
+    description: Push the current branch and set its upstream
+    command: git push --set-upstream origin {{branch}}
+    tags: [git, push]
+
+  - name: sync main
+    description: Update main with the latest remote commits, then return to this branch
+    command: git checkout main && git pull --rebase && git checkout -
+    tags: [git, sync]
+
+  - name: abort merge
+    description: Walk away from a merge in progress
+    command: git merge --abort
+    tags: [git, merge]
+
+  - name: pretty log
+    description: Compact decorated graph log
+    command: git log --oneline --graph --decorate --all
+    tags: [git, log]
+
+  - name: discard local changes
+    description: Stash everything (including untracked) for later
+    command: git stash --include-untracked
+    tags: [git, stash]
+
+  - name: recent branches
+    description: Branches by most recent commit
+    command: git for-each-ref --sort=-committerdate refs/heads --format='%(refname:short) %(committerdate:relative)'
+    tags: [git, branch]

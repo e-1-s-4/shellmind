@@ -1,0 +1,21 @@
+[package]
+name = "shellmind"
+description = "AI-powered autocomplete and command intelligence for your terminal"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "shellmind"
+path = "src/main.rs"
+
+[[bin]]
+name = "sm"
+path = "src/sm.rs"
+
+[dependencies]
+shellmind-core = { path = "../core" }
+clap.workspace = true
+libc = "0.2"
+serde_json.workspace = true

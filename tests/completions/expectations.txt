@@ -1,0 +1,7 @@
+# shellmind completion expectations
+# format: <buffer> | expected insert (any rank) | kind
+git log -- | --oneline | flag
+kubectl get  | pods | subcommand
+kubectl get pods -n  | production* | namespace
+npm run  | dev* | script
+docker compose up  | api* | service

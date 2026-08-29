@@ -1,0 +1,7 @@
+# shellmind parser regression corpus
+# format: <input> | binary | subcommands | flags
+ENV=production docker compose up --build | docker | compose,up | --build
+git log --oneline --graph HEAD~3 | git | log | --oneline,--graph
+kubectl get pods -n prod web | kubectl | get,pods | -n
+sudo rm -rf ./ | rm |  | -rf
+du -h > out.txt | du |  | -h

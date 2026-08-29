@@ -1,0 +1,285 @@
+# shellmind completion spec: kubectl
+name: kubectl
+description: Control Kubernetes clusters
+flags:
+  - name: -n
+    arg: namespace
+    description: Target namespace
+  - name: -A
+    description: All namespaces
+  - name: --all-namespaces
+    description: All namespaces
+  - name: -o
+    arg: format
+    description: Output format (yaml, json, wide, name, custom-columns=...)
+  - name: --context
+    arg: name
+    description: Use a specific kubeconfig context
+  - name: -v
+    arg: level
+    description: Log verbosity (0-9)
+subcommands:
+  - name: get
+    description: Display one or many resources
+    subcommands:
+      - name: pods
+        description: List pods
+      - name: deployments
+        description: List deployments
+      - name: services
+        description: List services
+      - name: configmaps
+        description: List config maps
+      - name: secrets
+        description: List secrets
+      - name: nodes
+        description: List cluster nodes
+      - name: namespaces
+        description: List namespaces
+      - name: ingresses
+        description: List ingresses
+      - name: persistentvolumes
+        description: List persistent volumes
+      - name: persistentvolumeclaims
+        description: List persistent volume claims
+      - name: jobs
+        description: List jobs
+      - name: cronjobs
+        description: List cron jobs
+      - name: events
+        description: List events
+      - name: serviceaccounts
+        description: List service accounts
+      - name: statefulsets
+        description: List stateful sets
+      - name: daemonsets
+        description: List daemon sets
+      - name: replicasets
+        description: List replica sets
+      - name: horizontalpodautoscalers
+        description: List autoscalers
+      - name: endpoints
+        description: List endpoints
+      - name: po
+        description: List pods (short)
+      - name: deploy
+        description: List deployments (short)
+      - name: svc
+        description: List services (short)
+      - name: cm
+        description: List config maps (short)
+      - name: no
+        description: List cluster nodes (short)
+      - name: ns
+        description: List namespaces (short)
+      - name: ing
+        description: List ingresses (short)
+      - name: pv
+        description: List persistent volumes (short)
+      - name: pvc
+        description: List persistent volume claims (short)
+      - name: ev
+        description: List events (short)
+      - name: sa
+        description: List service accounts (short)
+      - name: sts
+        description: List stateful sets (short)
+      - name: ds
+        description: List daemon sets (short)
+      - name: rs
+        description: List replica sets (short)
+      - name: hpa
+        description: List autoscalers (short)
+    flags:
+      - name: -w
+        description: Watch for changes
+      - name: --watch
+        description: Watch for changes
+      - name: --show-labels
+        description: Show labels on objects
+      - name: -l
+        arg: selector
+        description: Label selector filter
+      - name: --sort-by
+        arg: jsonpath
+        description: Sort output by this field
+      - name: --field-selector
+        arg: selector
+        description: Field selector filter
+  - name: describe
+    description: Show details of a specific resource
+    dynamic: k8s_resources
+  - name: logs
+    description: Print container logs
+    flags:
+      - name: -f
+        description: Follow log output
+      - name: --tail
+        arg: n
+        description: Last n lines
+      - name: -p
+        description: Previous (terminated) container instance
+      - name: --previous
+        description: Previous (terminated) container instance
+      - name: -c
+        arg: container
+        description: Container name
+      - name: --since
+        arg: duration
+        description: Logs newer than (e.g. 10m, 1h)
+      - name: --timestamps
+        description: Include timestamps
+  - name: apply
+    description: Apply a configuration to a resource from a file
+    flags:
+      - name: -f
+        arg: file
+        description: Apply from file or directory (-f - for stdin)
+      - name: -k
+        arg: dir
+        description: Apply from a kustomization directory
+      - name: --dry-run
+        arg: strategy
+        description: Dry run (client or server)
+      - name: --prune
+        description: Delete resources no longer in the config
+      - name: --server-side
+        description: Apply server-side
+      - name: -R
+        description: Recurse directories
+  - name: delete
+    description: Delete resources
+    flags:
+      - name: -f
+        arg: file
+        description: Delete resources from a file
+      - name: --dry-run
+        arg: strategy
+        description: Dry run (client or server)
+      - name: --grace-period
+        arg: seconds
+        description: Graceful shutdown period
+      - name: --force
+        description: Force immediate deletion
+      - name: -l
+        arg: selector
+        description: Delete matching label selector
+      - name: --all
+        description: Delete all of this resource type
+    dynamic: k8s_resources
+  - name: edit
+    description: Edit a resource in your editor
+    dynamic: k8s_resources
+  - name: exec
+    description: Execute a command inside a container
+    flags:
+      - name: -it
+        description: Interactive TTY
+      - name: -c
+        arg: container
+        description: Container name
+  - name: scale
+    description: Set replica count for a resource
+    flags:
+      - name: --replicas
+        arg: n
+        description: Target replica count
+      - name: --current-replicas
+        arg: n
+        description: Only scale if current count matches
+  - name: rollout
+    description: Manage a resource's rollout
+    subcommands:
+      - name: status
+        description: Watch rollout progress
+      - name: history
+        description: Show rollout revisions
+      - name: undo
+        description: Roll back to a previous revision
+        flags:
+          - name: --to-revision
+            arg: n
+            description: Target revision
+      - name: restart
+        description: Restart pods of a resource
+      - name: pause
+        description: Pause a rollout
+      - name: resume
+        description: Resume a paused rollout
+  - name: port-forward
+    description: Forward a local port to a pod/service port
+    flags:
+      - name: --address
+        arg: ip
+        description: Listen address (default localhost)
+  - name: top
+    description: Show resource usage
+    subcommands:
+      - name: node
+        description: Node resource usage
+        flags:
+          - name: --sort-by
+            arg: cpu|memory
+            description: Sort output
+      - name: pod
+        description: Pod resource usage
+        flags:
+          - name: --containers
+            description: Per-container usage
+          - name: --sort-by
+            arg: cpu|memory
+            description: Sort output
+  - name: config
+    description: Manage kubeconfig
+    subcommands:
+      - name: use-context
+        description: Switch the current context
+      - name: current-context
+        description: Print the current context
+      - name: get-contexts
+        description: List contexts
+      - name: set-context
+        description: Set context properties
+      - name: view
+        description: Print the merged kubeconfig
+        flags:
+          - name: --minify
+            description: Only the current context
+      - name: set-namespace
+        description: Set the default namespace of a context
+  - name: cp
+    description: Copy files to/from containers
+    flags:
+      - name: -c
+        arg: container
+        description: Container name
+  - name: wait
+    description: Wait for resources to reach a condition
+    flags:
+      - name: --for
+        arg: condition
+        description: Condition (e.g. delete, jsonpath=...)
+      - name: --timeout
+        arg: duration
+        description: Max wait time
+  - name: auth
+    description: Inspect authorization
+    subcommands:
+      - name: can-i
+        description: Check whether an action is allowed
+        flags:
+          - name: --list
+            description: List all allowed actions
+      - name: whoami
+        description: Show current user info
+  - name: version
+    description: Print client and server version
+    flags:
+      - name: -o
+        arg: format
+        description: Output format (yaml, json)
+  - name: cluster-info
+    description: Show cluster endpoints
+  - name: explain
+    description: Documentation of a resource's fields
+    dynamic: k8s_resources

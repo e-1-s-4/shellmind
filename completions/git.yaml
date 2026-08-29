@@ -1,0 +1,398 @@
+# shellmind completion spec: git
+# Customize by copying to ~/.config/shellmind/completions/git.yaml
+name: git
+description: Distributed version control system
+flags:
+  - name: -C
+    arg: path
+    description: Run as if git was started in <path>
+  - name: --no-pager
+    description: Do not pipe output into a pager
+  - name: -c
+    arg: key=value
+    description: Set a configuration value for this invocation
+subcommands:
+  - name: add
+    description: Stage file contents for the next commit
+    flags:
+      - name: -p
+        description: Interactively stage hunks (patch mode)
+      - name: -A
+        description: Stage all changes including new files
+      - name: -u
+        description: Stage modifications and deletions of tracked files only
+      - name: -n
+        description: Dry run — show what would be staged
+      - name: -f
+        description: Force-add otherwise ignored files
+  - name: branch
+    description: List, create or delete branches
+    flags:
+      - name: -a
+        description: List both local and remote branches
+      - name: -d
+        description: Delete a fully merged branch
+      - name: -D
+        description: Force-delete a branch (even if unmerged)
+      - name: -m
+        arg: new-name
+        description: Rename the current branch
+      - name: -vv
+        description: Verbose list with upstream tracking info
+      - name: --list
+        description: List branches matching a pattern
+      - name: --set-upstream-to
+        arg: remote/branch
+        description: Set the upstream for the current branch
+    dynamic: git_branches
+  - name: checkout
+    description: Switch branches or restore working tree files
+    flags:
+      - name: -b
+        arg: branch
+        description: Create and switch to a new branch
+      - name: -B
+        arg: branch
+        description: Create (resetting if it exists) and switch to a branch
+      - name: --detach
+        description: Detach HEAD at a commit
+      - name: --ours
+        description: Take our version during conflict resolution
+      - name: --theirs
+        description: Take their version during conflict resolution
+    dynamic: git_branches
+  - name: switch
+    description: Switch to a branch (modern checkout)
+    flags:
+      - name: -c
+        arg: branch
+        description: Create and switch to a new branch
+      - name: --detach
+        description: Detach HEAD at a commit
+    dynamic: git_branches
+  - name: clone
+    description: Clone a repository into a new directory
+    flags:
+      - name: --depth
+        arg: n
+        description: Create a shallow clone of the last n commits
+      - name: --branch
+        arg: branch
+        description: Clone a specific branch
+      - name: --single-branch
+        description: Clone only one branch (with --depth)
+      - name: --recurse-submodules
+        description: Initialize and clone submodules
+      - name: -o
+        arg: name
+        description: Use a different remote name instead of origin
+  - name: commit
+    description: Record changes to the repository
+    flags:
+      - name: -m
+        arg: message
+        description: Commit message
+      - name: -a
+        description: Stage modified and deleted tracked files automatically
+      - name: --amend
+        description: Amend the previous commit
+      - name: --no-edit
+        description: Reuse the previous commit message (with --amend)
+      - name: --allow-empty
+        description: Allow a commit with no changes
+      - name: -s
+        description: Add a Signed-off-by trailer
+      - name: -v
+        description: Show the diff being committed
+  - name: config
+    description: Get and set repository or global options
+    flags:
+      - name: --global
+        description: Operate on the global config file
+      - name: --local
+        description: Operate on the repository config file
+      - name: --list
+        description: List all config values
+      - name: --get
+        arg: key
+        description: Print the value for a key
+      - name: --unset
+        arg: key
+        description: Remove a config value
+  - name: diff
+    description: Show changes between commits, the working tree and the index
+    flags:
+      - name: --staged
+        description: Diff the index against HEAD (staged changes)
+      - name: --cached
+        description: Synonym of --staged
+      - name: --stat
+        description: Show diffstat summary instead of full diff
+      - name: -p
+        description: Show the patch (default)
+      - name: --name-only
+        description: Show only file names
+      - name: --word-diff
+        description: Highlight changed words instead of lines
+  - name: fetch
+    description: Download objects and refs from another repository
+    flags:
+      - name: --all
+        description: Fetch all remotes
+      - name: --prune
+        description: Delete refs that no longer exist on the remote
+      - name: --tags
+        description: Fetch all tags
+      - name: --dry-run
+        description: Show what would be fetched
+    dynamic: git_remotes
+  - name: log
+    description: Show commit history
+    flags:
+      - name: --oneline
+        description: Show one commit per line
+      - name: --graph
+        description: Show the commit graph
+      - name: --decorate
+        description: Show ref names (branches, tags) next to commits
+      - name: --author
+        arg: author
+        description: Filter by author
+      - name: --since
+        arg: date
+        description: Show commits after this date
+      - name: --until
+        arg: date
+        description: Show commits before this date
+      - name: --grep
+        arg: pattern
+        description: Search commit messages
+      - name: --stat
+        description: Show file statistics for each commit
+      - name: -p
+        description: Show each commit's patch
+      - name: -n
+        arg: num
+        description: Limit to the last n commits
+      - name: --follow
+        arg: file
+        description: Continue listing the history of a single file past renames
+  - name: merge
+    description: Join another development history into the current branch
+    flags:
+      - name: --no-ff
+        description: Always create a merge commit
+      - name: --squash
+        description: Merge without committing (stage only)
+      - name: --abort
+        description: Abort an in-progress merge
+      - name: --continue
+        description: Conclude a resolved merge
+      - name: -m
+        arg: message
+        description: Set the merge commit message
+  - name: pull
+    description: Fetch from and integrate with another repository
+    flags:
+      - name: --rebase
+        description: Rebase local commits on top of the fetched branch
+      - name: --ff-only
+        description: Abort instead of creating a merge commit
+      - name: --autostash
+        description: Stash local changes before pulling
+      - name: --squash
+        description: Merge the remote branch as a single squash change
+    dynamic: git_remotes
+  - name: push
+    description: Update remote refs with local objects
+    flags:
+      - name: --set-upstream
+        description: Set the remote branch as upstream of the current one
+      - name: -u
+        description: Shorthand for --set-upstream
+      - name: --force-with-lease
+        description: Force-push only if the remote ref is unchanged
+      - name: --force
+        description: Force-push, overwriting remote history (dangerous)
+      - name: --all
+        description: Push all branches
+      - name: --tags
+        description: Push all tags
+      - name: --delete
+        arg: remote-branch
+        description: Delete a remote branch
+      - name: --dry-run
+        description: Show what would be pushed
+    dynamic: git_remotes
+  - name: rebase
+    description: Reapply commits on top of another base tip
+    flags:
+      - name: -i
+        arg: base
+        description: Interactive rebase (reorder, squash, edit)
+      - name: --continue
+        description: Continue after resolving conflicts
+      - name: --abort
+        description: Abort and restore the original branch
+      - name: --autosquash
+        description: Reorder fixup!/squash! commits automatically
+      - name: --onto
+        arg: base
+        description: Rebuild commits on a new base
+  - name: remote
+    description: Manage the set of tracked repositories
+    subcommands:
+      - name: add
+        description: Add a remote
+      - name: remove
+        description: Remove a remote
+      - name: rename
+        description: Rename a remote
+      - name: set-url
+        description: Change a remote's URL
+      - name: get-url
+        description: Print a remote's URL
+      - name: show
+        description: Show details of a remote
+      - name: prune
+        description: Delete stale remote-tracking refs
+    flags:
+      - name: -v
+        description: Show remote URLs
+    dynamic: git_remotes
+  - name: reset
+    description: Reset current HEAD to a specified state
+    flags:
+      - name: --soft
+        description: Keep the index and working tree
+      - name: --mixed
+        description: Reset the index, keep the working tree (default)
+      - name: --hard
+        description: Discard all uncommitted changes (dangerous)
+  - name: restore
+    description: Restore working tree files
+    flags:
+      - name: --staged
+        description: Unstage instead of restoring the working tree
+      - name: --source
+        arg: commit
+        description: Restore from this commit
+      - name: -p
+        description: Interactively restore hunks
+  - name: revert
+    description: Create a commit that undoes a previous commit
+    flags:
+      - name: --no-commit
+        description: Stage the revert without committing
+      - name: --continue
+        description: Continue after conflict resolution
+      - name: --abort
+        description: Cancel an in-progress revert
+  - name: cherry-pick
+    description: Apply the changes of an existing commit
+    flags:
+      - name: -n
+        description: Apply without committing
+      - name: -x
+        description: Append "(cherry picked from ...)" to the message
+      - name: --continue
+        description: Continue after conflict resolution
+      - name: --abort
+        description: Cancel an in-progress cherry-pick
+  - name: stash
+    description: Stash and restore local changes
+    subcommands:
+      - name: push
+        description: Save local changes to a new stash
+      - name: pop
+        description: Apply and drop the latest stash
+      - name: apply
+        description: Apply the latest stash, keeping it
+      - name: list
+        description: List all stashes
+      - name: show
+        description: Show the diff of a stash
+      - name: drop
+        description: Drop a stash
+      - name: clear
+        description: Drop all stashes (dangerous)
+  - name: status
+    description: Show the working tree status
+    flags:
+      - name: -s
+        description: Short format
+      - name: -b
+        description: Show branch info (with -s)
+      - name: --porcelain
+        description: Machine-readable output
+      - name: --ignored
+        description: Also list ignored files
+  - name: tag
+    description: Create, list or delete tags
+    flags:
+      - name: -a
+        arg: tag
+        description: Create an annotated tag
+      - name: -m
+        arg: message
+        description: Tag message
+      - name: -d
+        arg: tag
+        description: Delete a tag
+      - name: -l
+        arg: pattern
+        description: List tags matching a pattern
+  - name: clean
+    description: Remove untracked files from the working tree
+    flags:
+      - name: -n
+        description: Dry run — show what would be removed
+      - name: -f
+        description: Actually remove the files
+      - name: -d
+        description: Also recurse into untracked directories
+      - name: -x
+        description: Also remove ignored files
+  - name: worktree
+    description: Manage multiple working trees
+    subcommands:
+      - name: add
+        description: Create a new working tree
+      - name: list
+        description: List working trees
+      - name: remove
+        description: Remove a working tree
+  - name: show
+    description: Show objects (commits, tags, blobs)
+    flags:
+      - name: --stat
+        description: Show diffstat instead of the full diff
+      - name: -p
+        description: Show the patch
+      - name: --oneline
+        description: Compact one-line output
+  - name: blame
+    description: Show who last modified each line
+    flags:
+      - name: -L
+        arg: start,end
+        description: Annotate only a line range
+      - name: -w
+        description: Ignore whitespace changes
+  - name: init
+    description: Create an empty repository
+    flags:
+      - name: --bare
+        description: Create a bare repository
+      - name: -b
+        arg: branch
+        description: Initial branch name
+  - name: mv
+    description: Move or rename a file
+  - name: rm
+    description: Remove files from the working tree and the index
+    flags:
+      - name: -r
+        description: Recurse into directories
+      - name: --cached
+        description: Unstage only, keep the file on disk

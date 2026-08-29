@@ -1,0 +1,26 @@
+# shellmind team pack: postgres
+snippets:
+  - name: postgres backup
+    description: Full custom-format database dump
+    command: pg_dump -U {{user}} -h {{host}} -F c -b -v -f {{file}} {{db}}
+    tags: [postgres, backup]
+
+  - name: postgres restore
+    description: Restore a custom-format dump into a database
+    command: pg_restore -U {{user}} -h {{host}} -d {{db}} --clean --if-exists {{file}}
+    tags: [postgres, restore]
+
+  - name: postgres list databases
+    description: List every database with its size
+    command: psql -U {{user}} -h {{host}} -c '\l+'
+    tags: [postgres, inspect]
+
+  - name: postgres table sizes
+    description: Biggest tables in the current database
+    command: psql -U {{user}} -h {{host}} -d {{db}} -c "SELECT relname, pg_size_pretty(pg_total_relation_size(relid)) FROM pg_catalog.pg_statio_user_tables ORDER BY pg_total_relation_size(relid) DESC LIMIT 20;"
+    tags: [postgres, inspect]
+
+  - name: postgres active queries
+    description: Queries currently running on the server
+    command: psql -U {{user}} -h {{host}} -c "SELECT pid, age(clock_timestamp(), query_start), state, left(query, 120) FROM pg_stat_activity WHERE state <> 'idle' ORDER BY query_start;"
+    tags: [postgres, inspect]

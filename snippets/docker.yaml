@@ -1,0 +1,36 @@
+# shellmind team pack: docker
+snippets:
+  - name: compose up rebuild
+    description: Recreate every compose service with fresh images
+    command: docker compose up -d --build --force-recreate
+    tags: [docker, compose]
+
+  - name: compose logs tail
+    description: Follow the last 100 log lines of a service
+    command: docker compose logs -f --tail 100 {{service}}
+    tags: [docker, compose, logs]
+
+  - name: shell into container
+    description: Open an interactive shell in a running container
+    command: docker exec -it {{container}} sh
+    tags: [docker, exec]
+
+  - name: clean dangling images
+    description: Remove only dangling (untagged) images
+    command: docker image prune
+    tags: [docker, cleanup]
+
+  - name: stop all containers
+    description: Stop every running container
+    command: docker stop $(docker ps -q)
+    tags: [docker, stop]
+
+  - name: container disk usage
+    description: Per-container disk write accounting
+    command: docker ps -s --format 'table {{.Names}}\t{{.Size}}'
+    tags: [docker, disk]
+
+  - name: nuke volumes
+    description: Stop compose stack and delete its volumes (destructive!)
+    command: docker compose down -v
+    tags: [docker, destructive]
